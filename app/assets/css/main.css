@@ -56,6 +56,15 @@
       text-decoration: underline;
     }
   }
+
+  .page-title {
+    font-weight: 700;
+    font-size: larger;
+  }
+
+  .section-title {
+    font-weight: 600;
+  }
 }
 
 :root {

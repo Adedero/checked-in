@@ -4,7 +4,7 @@ interface Props {
 }
 const { trigger = "click" } = defineProps<Props>();
 
-const isOpen = ref<boolean>(false);
+const isOpen = defineModel<boolean>('open', { default: false });
 
 const triggerEl = useTemplateRef("el");
 

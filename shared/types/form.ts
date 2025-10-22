@@ -1,82 +1,333 @@
-type StringValidationType = 'email' | 'url' | 'none';
-
-type StringType<T extends StringValidationType> = {
-  type: 'string';
-  minLength?: number;
-  maxLength?: number;
-  pattern?: string | RegExp;
-  unique?: boolean;
-  placeholder?: string;
-  validationType?: T;
+export type Form = {
+  id: string;
+  title?: string;
+  description?: string;
+  coverImage?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  fields: FormField[];
 };
 
-type BaseField = {
+// ============================================
+// BASE FIELD (for fields that accept input)
+// ============================================
+export type BaseField = {
+  id: string;
+  formId: string;
+  label: string;
+  description?: string;
+  placeholder?: string;
   required?: boolean;
-  label?: string;
+  isFocused?: boolean;
+};
+
+// ============================================
+// BASE LAYOUT FIELD (for non-input elements)
+// ============================================
+export type BaseLayoutField = {
+  id: string;
+  formId: string;
+  isFocused?: boolean;
+};
+
+// ============================================
+// TEXT FIELDS
+// ============================================
+export type ShortTextField = BaseField & {
+  type: 'shorttext';
+  validations?: ShortTextValidation[];
+};
+
+export type LongTextField = BaseField & {
+  type: 'longtext';
+  validations?: LongTextValidation[];
+};
+
+// ============================================
+// NUMBER FIELD
+// ============================================
+export type NumberField = BaseField & {
+  type: 'number';
+  step?: number;
+  validations?: NumberValidation[];
+};
+
+// ============================================
+// SELECTION FIELDS
+// ============================================
+export type SelectField = BaseField & {
+  type: 'select';
+  options: Array<{ label: string; value: string }>;
+};
+
+export type MultiSelectField = BaseField & {
+  type: 'multiselect';
+  options: Array<{ label: string; value: string }>;
+  validations?: MultiSelectValidation[];
+};
+
+export type RadioField = BaseField & {
+  type: 'radio';
+  options: Array<{ label: string; value: string }>;
+  layout?: 'list' | 'grid';
+};
+
+export type CheckboxField = BaseField & {
+  type: 'checkbox';
+  options: Array<{ label: string; value: string }>;
+  validations?: MultiSelectValidation[];
+  layout?: 'list' | 'grid';
+};
+
+// ============================================
+// DATE & TIME FIELDS
+// ============================================
+export type DateField = BaseField & {
+  type: 'date';
+  validations?: DateValidation[];
+};
+
+export type TimeField = BaseField & {
+  type: 'time';
+  validations?: TimeValidation[];
+};
+
+// ============================================
+// FILE FIELDS
+// ============================================
+export type ImageFileField = BaseField & {
+  type: 'image';
+  multiple?: boolean;
+  validations?: BaseFileValidation<FormImageFileTypeExtension>[];
+};
+
+export type VideoFileField = BaseField & {
+  type: 'video';
+  multiple?: boolean;
+  validations?: BaseFileValidation<FormVideoFileTypeExtension>[];
+};
+
+export type AudioFileField = BaseField & {
+  type: 'audio';
+  multiple?: boolean;
+  validations?: BaseFileValidation<FormAudioFileTypeExtension>[];
+};
+
+export type DocumentFileField = BaseField & {
+  type: 'document';
+  multiple?: boolean;
+  validations?: BaseFileValidation<FormDocumentFileTypeExtension>[];
+};
+
+// ============================================
+// RATING & SCALE FIELDS
+// ============================================
+export type ScaleField = BaseField & {
+  type: 'scale';
+  steps: {
+    value: number;
+    label: string;
+  }[];
+  labels?: string[]; // Made optional - might not always have labels
+};
+
+export type RatingField = BaseField & {
+  type: 'rating';
+  from: number;
+  to: number;
+  icon?: 'star' | 'heart' | 'thumb';
+};
+
+// ============================================
+// CONTACT FIELDS
+// ============================================
+export type PhoneField = BaseField & {
+  type: 'phone';
+  defaultCountry?: string;
+  unique?: boolean;
+};
+
+export type AddressField = BaseField & {
+  type: 'address';
+  fields?: {
+    street?: boolean;
+    city?: boolean;
+    state?: boolean;
+    zip?: boolean;
+    country?: boolean;
+  };
+};
+
+// ============================================
+// SIGNATURE FIELD
+// ============================================
+export type SignatureField = BaseField & {
+  type: 'signature';
+  backgroundColor?: string;
+};
+
+// ============================================
+// LAYOUT FIELDS (non-input)
+// ============================================
+export type DividerField = BaseLayoutField & {
+  type: 'divider';
+  style?: 'solid' | 'dashed' | 'dotted';
+  color?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral';
+  text?: string;
+};
+
+export type HeadingField = BaseLayoutField & {
+  type: 'heading';
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  text: string;
   description?: string;
 };
 
-type StringField = StringType<'none'>;
-
-type EmailField = StringType<'email'>;
-
-type URLField = StringType<'url'>;
-
-type NumberField = BaseField & {
-  type: 'number';
-  min?: number;
-  max?: number;
-  minFractionDigits?: number;
-  maxFractionDigits?: number;
-  unique?: boolean;
-  step?: number;
-  placeholder?: string;
-};
-
-type EnumField = BaseField & {
-  type: 'enum';
-  options: Array<{ label: string; value: string | number }>;
-  multiple?: boolean;
-};
-
-type BooleanField = BaseField & {
-  type: 'boolean';
-  trueLabel?: string;
-  falseLabel?: string;
-};
-
-type FileField = BaseField & {
-  type: 'file';
-  allowedMimeTypes?: string[];
-  maxSizeInBytes?: number;
-  multiple?: boolean;
-  maxFiles?: number;
-};
-
-type DateField = BaseField & {
-  type: 'date';
-  min?: string; // ISO date string
-  max?: string;
-};
-
-type ListField = BaseField & {
-  type: 'list';
-  itemType: 'string' | 'number' | 'enum';
-  options?: string[];
-  allowCustom?: boolean;
-  minItems?: number;
-  maxItems?: number;
-};
-
-export type FieldSchema =
-  | StringField
-  | EmailField
-  | URLField
+// ============================================
+// UNION TYPE
+// ============================================
+export type FormField =
+  | ShortTextField
+  | LongTextField
   | NumberField
-  | EnumField
-  | BooleanField
-  | FileField
+  | SelectField
+  | MultiSelectField
+  | RadioField
+  | CheckboxField
   | DateField
-  | ListField;
+  | TimeField
+  | ImageFileField
+  | VideoFileField
+  | AudioFileField
+  | DocumentFileField
+  | ScaleField
+  | RatingField
+  | PhoneField
+  | AddressField
+  | SignatureField
+  | DividerField
+  | HeadingField;
 
-export type FormSchema = Record<string, FieldSchema>;
+// ============================================
+// HELPER TYPES
+// ============================================
+export type FormDate = {
+  year: number;
+  month:
+    | 1
+    | 2
+    | 3
+    | 4
+    | 5
+    | 6
+    | 7
+    | 8
+    | 9
+    | 10
+    | 11
+    | 12
+    | 'jan'
+    | 'feb'
+    | 'mar'
+    | 'apr'
+    | 'may'
+    | 'jun'
+    | 'jul'
+    | 'aug'
+    | 'sep'
+    | 'oct'
+    | 'nov'
+    | 'dec';
+  day: number;
+};
+
+export type FormTime = {
+  days?: number;
+  hours?: number;
+  minutes?: number;
+  seconds?: number;
+  meridian?: 'a.m.' | 'p.m.';
+};
+
+export type FormFileSize = {
+  value?: number;
+  unit?: 'KB' | 'MB' | 'GB';
+};
+
+export type FormFileType = 'all' | 'image' | 'video' | 'audio' | 'document';
+export type FormImageFileTypeExtension =
+  | 'all'
+  | 'jpg'
+  | 'jpeg'
+  | 'webp'
+  | 'png'
+  | 'svg'
+  | 'gif'
+  | 'avif';
+export type FormVideoFileTypeExtension = 'all' | '3gp' | 'mp4' | 'mkv';
+export type FormAudioFileTypeExtension = 'all' | 'mp3' | 'aac';
+export type FormDocumentFileTypeExtension =
+  | 'all'
+  | 'pdf'
+  | 'doc'
+  | 'docx'
+  | 'ppt'
+  | 'pptx'
+  | 'xls'
+  | 'xlsx'
+  | 'rtf'
+  | 'txt'
+  | 'csv'
+  | 'epub';
+
+// ============================================
+// VALIDATION RULES
+// ============================================
+export type ShortTextValidation =
+  | { type: 'min_length'; value: number; message: string }
+  | { type: 'max_length'; value: number; message: string }
+  | { type: 'pattern'; value: string | RegExp; message: string }
+  | { type: 'contains'; value: string; message: string }
+  | { type: 'not_contains'; value: string; message: string }
+  | { type: 'starts_with'; value: string; message: string }
+  | { type: 'ends_with'; value: string; message: string }
+  | { type: 'email'; message: string }
+  | { type: 'url'; message: string }
+  | { type: 'unique'; message: string };
+
+export type LongTextValidation =
+  | { type: 'min_length'; value: number; message: string }
+  | { type: 'max_length'; value: number; message: string };
+
+export type NumberValidation =
+  | { type: 'min'; value: number; message: string }
+  | { type: 'max'; value: number; message: string }
+  | { type: 'integer'; message: string }
+  | { type: 'min_fraction_digits'; value: number; message: string }
+  | { type: 'max_fraction_digits'; value: number; message: string }
+  | { type: 'equal'; value: number; message: string }
+  | { type: 'greater_than'; value: number; message: string }
+  | { type: 'less_than'; value: number; message: string }
+  | { type: 'greater_than_or_equal'; value: number; message: string }
+  | { type: 'less_than_or_equal'; value: number; message: string }
+  | { type: 'positive'; message: string }
+  | { type: 'negative'; message: string }
+  | { type: 'unique'; message: string };
+
+export type MultiSelectValidation =
+  | { type: 'min_selections'; value: number; message: string }
+  | { type: 'max_selections'; value: number; message: string };
+
+export type DateValidation =
+  | { type: 'between'; value: FormDate; message: string }
+  | { type: 'before'; value: FormDate; message: string }
+  | { type: 'after'; value: FormDate; message: string };
+
+export type TimeValidation =
+  | { type: 'between'; value: FormTime; message: string }
+  | { type: 'before'; value: FormTime; message: string }
+  | { type: 'after'; value: FormTime; message: string };
+
+export type BaseFileValidation<ExtensionType> =
+  | { type: 'max_size'; value: FormFileSize; message: string }
+  | { type: 'allowed_extensions'; value: ExtensionType[]; message: string };

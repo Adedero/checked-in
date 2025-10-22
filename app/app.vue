@@ -3,6 +3,7 @@
     <NuxtRouteAnnouncer />
     <NuxtLoadingIndicator />
     <NuxtApp>
+      <NuxtConfirmDialog />
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>

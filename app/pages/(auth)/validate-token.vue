@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useRouteQuery } from '@vueuse/router';
+
 definePageMeta({
   layout: 'auth'
 });
@@ -7,7 +9,7 @@ useSeoMeta({
   title: 'CheckedIn - Validate Token'
 });
 
-const error = useRouteData().getSearchParams('error');
+const error = useRouteQuery('error');
 </script>
 
 <template>

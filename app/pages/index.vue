@@ -5,6 +5,8 @@ definePageMeta({
 </script>
 
 <template>
-  <MainHomeHero />
-  <MainHomeFeatures />
+  <div>
+    <MainHomeHero />
+    <MainHomeFeatures />
+  </div>
 </template>

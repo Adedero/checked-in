@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useAsyncState } from '@vueuse/core';
+import { useRouteQuery } from '@vueuse/router';
 import { authClient } from '~/lib/auth-client';
 
 definePageMeta({
@@ -11,37 +12,34 @@ useSeoMeta({
 });
 
 const toast = useToast();
-const email = useRouteData().getSearchParams('email');
+const email = useRouteQuery('email');
 
-const decodedEmail = computed<string>(() => atob(email ?? ''));
+const decodedEmail = computed<string>(() => atob(email.value?.toString() || ''));
 
-const { state, executeImmediate: sendVerificationMail } = useAsyncState(
-  async function () {
-    return await authClient.sendVerificationEmail(
-      {
-        email: decodedEmail.value,
-        callbackURL: '/validate-token'
+const { state, executeImmediate: sendVerificationMail } = useAsyncState(async function () {
+  return await authClient.sendVerificationEmail(
+    {
+      email: decodedEmail.value,
+      callbackURL: '/validate-token'
+    },
+    {
+      onError: (ctx) => {
+        toast.add({
+          title: 'Error',
+          description: ctx.error.message,
+          color: 'error'
+        });
       },
-      {
-        onError: (ctx) => {
-          toast.add({
-            title: 'Error',
-            description: ctx.error.message,
-            color: 'error'
-          });
-        },
-        onSuccess: () => {
-          toast.add({
-            title: 'Success',
-            description: 'Verification email sent successfully',
-            color: 'success'
-          });
-        }
+      onSuccess: () => {
+        toast.add({
+          title: 'Success',
+          description: 'Verification email sent successfully',
+          color: 'success'
+        });
       }
-    );
-  },
-  null
-);
+    }
+  );
+}, null);
 
 onMounted(() => {
   if (!decodedEmail.value) {
@@ -60,9 +58,7 @@ onMounted(() => {
     <div class="w-full md:w-[70%] md:max-w-[28rem] md:mx-auto">
       <header>
         <h1 class="text-4xl font-bold">Verify your email</h1>
-        <p class="text-sm mt-2">
-          You must verify your email address to continue.
-        </p>
+        <p class="text-sm mt-2">You must verify your email address to continue.</p>
       </header>
 
       <div class="my-5">
@@ -91,14 +87,8 @@ onMounted(() => {
           </div>
 
           <div class="mt-4 flex items-center">
-            <p class="text-muted text-sm">
-              Didn't receive the email? Check your spam folder or
-            </p>
-            <NuxtButton
-              variant="link"
-              loading-auto
-              @click="sendVerificationMail()"
-            >
+            <p class="text-muted text-sm">Didn't receive the email? Check your spam folder or</p>
+            <NuxtButton variant="link" loading-auto @click="sendVerificationMail()">
               Resend
             </NuxtButton>
           </div>
