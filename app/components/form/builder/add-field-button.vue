@@ -25,9 +25,8 @@ const items = ref<DropdownMenuItem[]>([
       handleSelect({
         id: ulid(),
         formId: form.value.id,
-        label: 'New header',
+        text: 'New heading',
         type: 'heading',
-        text: 'New header'
       });
     }
   },

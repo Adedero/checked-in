@@ -38,7 +38,7 @@
 
     <div class="bg-muted h-[34rem] relative">
       <div
-        class="bg-default rounded-xl border border-default w-[70%] h-[40rem] mx-auto shadow-lg -translate-y-54 overflow-hidden"
+        class="bg-default rounded-xl border border-default w-[70%] h-[32rem] mx-auto shadow-lg -translate-y-54 overflow-hidden"
       >
         <!-- Image goes here -->
       </div>

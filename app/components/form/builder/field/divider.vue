@@ -42,7 +42,13 @@ const colors = ref<NonNullable<SeparatorProps['color']>[]>([
 
     <div class="flex items-center gap-x-2 justify-end">
       <NuxtSelect v-model="field.style" :items="styles" />
-      <NuxtSelect v-model="field.color" :items="colors" class="min-w-28" />
+      <NuxtSelect v-model="field.color" :items="colors">
+        <template #leading>
+          <div class="size-5 flex-center">
+            <NuxtChip :color="field.color" size="lg" />
+          </div>
+        </template>
+      </NuxtSelect>
     </div>
   </div>
 </template>

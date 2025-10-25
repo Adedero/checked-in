@@ -9,7 +9,7 @@ const drag = ref<boolean>(false);
 const dragOptions = computed(() => ({
   animation: 200,
   disabled: false,
-  ghostClass: 'ghost'
+  ghostClass: 'ghost-drag'
 }));
 </script>
 
@@ -34,18 +34,3 @@ const dragOptions = computed(() => ({
     </template>
   </Draggable>
 </template>
-
-<style scoped>
-.flip-list-move {
-  transition: transform 0.5s;
-}
-
-.no-move {
-  transition: transform 0s;
-}
-
-.ghost {
-  opacity: 0.5;
-  background-color: var(--background-color-muted);
-}
-</style>

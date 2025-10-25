@@ -39,19 +39,14 @@ export const formFieldSelectItems: FormFieldSelectItem[] = [
     icon: 'lucide:chevron-down'
   },
   {
-    label: 'Multi select',
-    value: 'multiselect',
-    icon: 'lucide:list-checks'
-  },
-  {
-    label: 'Radio Group',
-    value: 'radio',
-    icon: 'lucide:circle-dot'
-  },
-  {
     label: 'Checkbox',
     value: 'checkbox',
     icon: 'lucide:check-square'
+  },
+  {
+    label: 'Multiple Choice',
+    value: 'radio',
+    icon: 'lucide:circle-dot'
   },
   {
     label: 'Date',

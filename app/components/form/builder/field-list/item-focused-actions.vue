@@ -39,9 +39,8 @@ function handleClick(field: FormField) {
           handleClick({
             id: ID(),
             formId: formId,
-            label: 'New field',
             type: 'heading',
-            text: 'New heading'
+            text: 'New header'
           })
         "
       />

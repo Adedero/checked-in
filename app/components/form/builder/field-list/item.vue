@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import useFormBuilder from '~/composables/use-form-builder';
 import {
+  FormBuilderFieldCheckbox,
+  FormBuilderFieldDate,
   FormBuilderFieldDivider,
+  FormBuilderFieldDropdown,
+  FormBuilderFieldHeading,
   FormBuilderFieldLongText,
-  FormBuilderFieldShortText
+  FormBuilderFieldNumber,
+  FormBuilderFieldRadio,
+  FormBuilderFieldShortText,
+  FormBuilderFieldTime
 } from '#components';
 
 const { fields } = useFormBuilder(useFormStateContext('form-new'));
@@ -20,19 +27,20 @@ const selectedType = computed<FormField['type']>({
     if (newType === props.field.type) return;
 
     const newField = fields.convertFieldType(newType, props.field);
+
     if (newField) {
       fields.replace(newField, props.field.id);
     }
   }
 });
 
-/* watch(
+watch(
   () => props.field.type,
   (newType) => {
     selectedType.value = newType;
   },
   { deep: true }
-); */
+);
 
 const component = computed(() => {
   switch (selectedType.value) {
@@ -40,8 +48,22 @@ const component = computed(() => {
       return FormBuilderFieldShortText;
     case 'longtext':
       return FormBuilderFieldLongText;
+    case 'number':
+      return FormBuilderFieldNumber;
+    case 'select':
+      return FormBuilderFieldDropdown;
+    case 'checkbox':
+      return FormBuilderFieldCheckbox;
+    case 'radio':
+      return FormBuilderFieldRadio;
+    case 'date':
+      return FormBuilderFieldDate;
+    case 'time':
+      return FormBuilderFieldTime;
     case 'divider':
       return FormBuilderFieldDivider;
+    case 'heading':
+      return FormBuilderFieldHeading;
     default:
       return FormBuilderFieldShortText;
   }
@@ -63,7 +85,7 @@ const component = computed(() => {
         <FormFieldSelect v-model="selectedType" class="w-full" />
 
         <div class="mt-6">
-          <component :is="component" :field />
+          <component :is="component" :field="field as any" />
         </div>
       </div>
 

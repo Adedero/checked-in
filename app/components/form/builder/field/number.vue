@@ -3,37 +3,41 @@ import useFormBuilder from '~/composables/use-form-builder';
 import Draggable from 'vuedraggable';
 
 interface Props {
-  field: ShortTextField;
+  field: NumberField;
 }
 
 const props = defineProps<Props>();
 
 const { ID, useFieldRef } = useFormBuilder(useFormStateContext('form-new'));
 
-const field = useFieldRef<ShortTextField>(props.field.id);
+const field = useFieldRef<NumberField>(props.field.id);
 
 /**
  * Validations
  */
 const drag = ref<boolean>(false);
 
-const validationTypes = ref<ShortTextValidation['type'][]>([
-  'min_length',
-  'max_length',
-  'contains',
-  'not_contains',
-  'starts_with',
-  'ends_with',
-  'email',
-  'url',
+const validationTypes = ref<NumberValidation['type'][]>([
+  'min',
+  'max',
+  'integer',
+  'min_fraction_digits',
+  'max_fraction_digits',
+  'equal',
+  'greater_than',
+  'less_than',
+  'greater_than_or_equal',
+  'less_than_or_equal',
+  'positive',
+  'negative',
   'unique'
 ]);
 
 function addValidation() {
-  const validation: ShortTextValidation = {
+  const validation: NumberValidation = {
     id: ID(),
-    type: 'min_length',
-    value: 3,
+    type: 'min',
+    value: 1,
     message: ''
   };
   if (field.value.validations) {
@@ -48,10 +52,6 @@ function removeValidation(id: string) {
     field.value.validations = field.value.validations.filter((validation) => validation.id !== id);
   }
 }
-
-/* function requiresValue(type: ShortTextValidation['type']) {
-  return type !== 'email' && type !== 'url' && type !== 'unique';
-} */
 </script>
 
 <template>
@@ -118,7 +118,7 @@ function removeValidation(id: string) {
         @start="drag = true"
         @end="drag = false"
       >
-        <template #item="{ element }: { element: ShortTextValidation }">
+        <template #item="{ element }: { element: NumberValidation }">
           <div class="flex border border-default rounded-md pr-0.5">
             <div class="handle flex-center cursor-move p-2">
               <NuxtIcon name="lucide:grip-vertical" />
@@ -135,7 +135,10 @@ function removeValidation(id: string) {
 
               <NuxtInput
                 v-if="
-                  element.type !== 'email' && element.type !== 'url' && element.type !== 'unique'
+                  element.type !== 'unique' &&
+                  element.type !== 'integer' &&
+                  element.type !== 'positive' &&
+                  element.type !== 'negative'
                 "
                 v-model="element.value"
                 variant="outline"

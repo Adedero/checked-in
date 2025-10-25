@@ -35,14 +35,13 @@ export default function useFormFields(form: Ref<Form>) {
     return newField;
   };
 
-
   const replace = <T extends FormField>(newField: T, targetField: FormField | string): T => {
     const index = getFieldIndex(targetField);
 
     form.value.fields.splice(index, 1, newField);
 
     return newField;
-  }
+  };
 
   const duplicate = (fieldOrId: FormField | string, position: 'prepend' | 'append' = 'append') => {
     const field = getField(fieldOrId);
@@ -100,25 +99,42 @@ export default function useFormFields(form: Ref<Form>) {
         newField = { label: '', ...base, type: 'longtext', validations: [] };
         break;
       case 'number':
-        newField = { label: '', ...base, type: 'number', step: 1, validations: [] };
+        newField = { label: '', ...base, type: 'number', /* step: 1, */ validations: [] };
         break;
       case 'select':
-        newField = { label: '', ...base, type: 'select', options: [] };
-        break;
-      case 'multiselect':
-        newField = { label: '', ...base, type: 'multiselect', options: [], validations: [] };
-        break;
-      case 'radio':
-        newField = { label: '', ...base, type: 'radio', options: [], layout: 'list' };
+        newField = {
+          label: '',
+          ...base,
+          type: 'select',
+          options: [
+            { id: ulid(), value: 'option 1' },
+            { id: ulid(), value: 'option 2' }
+          ]
+        };
         break;
       case 'checkbox':
         newField = {
           label: '',
           ...base,
           type: 'checkbox',
-          options: [],
+          options: [
+            { id: ulid(), value: 'option 1' },
+            { id: ulid(), value: 'option 2' }
+          ],
           layout: 'list',
           validations: []
+        };
+        break;
+      case 'radio':
+        newField = {
+          label: '',
+          ...base,
+          type: 'radio',
+          options: [
+            { id: ulid(), value: 'option 1' },
+            { id: ulid(), value: 'option 2' }
+          ],
+          layout: 'list'
         };
         break;
       case 'date':
@@ -139,12 +155,11 @@ export default function useFormFields(form: Ref<Form>) {
 
     // Merge overlapping attributes from oldField
     for (const key in oldField) {
-      if (key in newField && key !== 'type') {
+      if (key in newField && key !== 'type' && key !== 'validations') {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (newField as any)[key] = (oldField as any)[key];
       }
     }
-    //@ts-expect-error dynamic type
     return newField;
   };
 

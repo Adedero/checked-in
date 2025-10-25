@@ -48,7 +48,7 @@ export type LongTextField = BaseField & {
 // ============================================
 export type NumberField = BaseField & {
   type: 'number';
-  step?: number;
+  /* step?: number; */
   validations?: NumberValidation[];
 };
 
@@ -57,26 +57,20 @@ export type NumberField = BaseField & {
 // ============================================
 export type SelectField = BaseField & {
   type: 'select';
-  options: Array<{ label: string; value: string }>;
-};
-
-export type MultiSelectField = BaseField & {
-  type: 'multiselect';
-  options: Array<{ label: string; value: string }>;
-  validations?: MultiSelectValidation[];
-};
-
-export type RadioField = BaseField & {
-  type: 'radio';
-  options: Array<{ label: string; value: string }>;
-  layout?: 'list' | 'grid';
+  options: Array<{ id: string; value: string }>;
 };
 
 export type CheckboxField = BaseField & {
   type: 'checkbox';
-  options: Array<{ label: string; value: string }>;
-  validations?: MultiSelectValidation[];
+  options: Array<{ id: string; value: string }>;
+  validations?: CheckboxValidation[];
   layout?: 'list' | 'grid';
+};
+
+export type RadioField = BaseField & {
+  type: 'radio';
+  options: Array<{ id: string; value: string }>;
+  /*  layout?: 'list' | 'grid'; */
 };
 
 // ============================================
@@ -178,7 +172,7 @@ export type DividerField = BaseLayoutField & {
 
 export type HeadingField = BaseLayoutField & {
   type: 'heading';
-  level?: 1 | 2 | 3 | 4 | 5 | 6;
+ /*  level?: 1 | 2 | 3 | 4 | 5 | 6; */
   text: string;
   description?: string;
 };
@@ -191,7 +185,6 @@ export type FormField =
   | LongTextField
   | NumberField
   | SelectField
-  | MultiSelectField
   | RadioField
   | CheckboxField
   | DateField
@@ -213,31 +206,7 @@ export type FormField =
 // ============================================
 export type FormDate = {
   year: number;
-  month:
-    | 1
-    | 2
-    | 3
-    | 4
-    | 5
-    | 6
-    | 7
-    | 8
-    | 9
-    | 10
-    | 11
-    | 12
-    | 'jan'
-    | 'feb'
-    | 'mar'
-    | 'apr'
-    | 'may'
-    | 'jun'
-    | 'jul'
-    | 'aug'
-    | 'sep'
-    | 'oct'
-    | 'nov'
-    | 'dec';
+  month: number;
   day: number;
 };
 
@@ -284,50 +253,51 @@ export type FormDocumentFileTypeExtension =
 // VALIDATION RULES
 // ============================================
 export type ShortTextValidation =
-  | { type: 'min_length'; value: number; message: string }
-  | { type: 'max_length'; value: number; message: string }
-  | { type: 'pattern'; value: string | RegExp; message: string }
-  | { type: 'contains'; value: string; message: string }
-  | { type: 'not_contains'; value: string; message: string }
-  | { type: 'starts_with'; value: string; message: string }
-  | { type: 'ends_with'; value: string; message: string }
-  | { type: 'email'; message: string }
-  | { type: 'url'; message: string }
-  | { type: 'unique'; message: string };
+  | { id: string; type: 'min_length'; value: number; message: string }
+  | { id: string; type: 'max_length'; value: number; message: string }
+  /* | { id: string; type: 'pattern'; value: string | RegExp; message: string } */
+  | { id: string; type: 'contains'; value: string; message: string }
+  | { id: string; type: 'not_contains'; value: string; message: string }
+  | { id: string; type: 'starts_with'; value: string; message: string }
+  | { id: string; type: 'ends_with'; value: string; message: string }
+  | { id: string; type: 'email'; message: string }
+  | { id: string; type: 'url'; message: string }
+  | { id: string; type: 'unique'; message: string };
 
 export type LongTextValidation =
-  | { type: 'min_length'; value: number; message: string }
-  | { type: 'max_length'; value: number; message: string };
+  | { id: string; type: 'min_length'; value: number; message: string }
+  | { id: string; type: 'max_length'; value: number; message: string };
 
 export type NumberValidation =
-  | { type: 'min'; value: number; message: string }
-  | { type: 'max'; value: number; message: string }
-  | { type: 'integer'; message: string }
-  | { type: 'min_fraction_digits'; value: number; message: string }
-  | { type: 'max_fraction_digits'; value: number; message: string }
-  | { type: 'equal'; value: number; message: string }
-  | { type: 'greater_than'; value: number; message: string }
-  | { type: 'less_than'; value: number; message: string }
-  | { type: 'greater_than_or_equal'; value: number; message: string }
-  | { type: 'less_than_or_equal'; value: number; message: string }
-  | { type: 'positive'; message: string }
-  | { type: 'negative'; message: string }
-  | { type: 'unique'; message: string };
+  | { id: string; type: 'min'; value: number; message: string }
+  | { id: string; type: 'max'; value: number; message: string }
+  | { id: string; type: 'integer'; message: string }
+  | { id: string; type: 'min_fraction_digits'; value: number; message: string }
+  | { id: string; type: 'max_fraction_digits'; value: number; message: string }
+  | { id: string; type: 'equal'; value: number; message: string }
+  | { id: string; type: 'greater_than'; value: number; message: string }
+  | { id: string; type: 'less_than'; value: number; message: string }
+  | { id: string; type: 'greater_than_or_equal'; value: number; message: string }
+  | { id: string; type: 'less_than_or_equal'; value: number; message: string }
+  | { id: string; type: 'positive'; message: string }
+  | { id: string; type: 'negative'; message: string }
+  | { id: string; type: 'unique'; message: string };
 
-export type MultiSelectValidation =
-  | { type: 'min_selections'; value: number; message: string }
-  | { type: 'max_selections'; value: number; message: string };
+export type CheckboxValidation =
+  | { id: string; type: 'select_at_least'; value: number; message: string }
+  | { id: string; type: 'select_at_most'; value: number; message: string }
+  | { id: string; type: 'select_exactly'; value: number; message: string };
 
 export type DateValidation =
-  | { type: 'between'; value: FormDate; message: string }
-  | { type: 'before'; value: FormDate; message: string }
-  | { type: 'after'; value: FormDate; message: string };
+  | { id: string; type: 'between'; value: [FormDate, FormDate]; message: string }
+  | { id: string; type: 'before'; value: FormDate; message: string }
+  | { id: string; type: 'after'; value: FormDate; message: string };
 
 export type TimeValidation =
-  | { type: 'between'; value: FormTime; message: string }
-  | { type: 'before'; value: FormTime; message: string }
-  | { type: 'after'; value: FormTime; message: string };
+  | { id: string; type: 'between'; value: FormTime; message: string }
+  | { id: string; type: 'before'; value: FormTime; message: string }
+  | { id: string; type: 'after'; value: FormTime; message: string };
 
 export type BaseFileValidation<ExtensionType> =
-  | { type: 'max_size'; value: FormFileSize; message: string }
-  | { type: 'allowed_extensions'; value: ExtensionType[]; message: string };
+  | { id: string; type: 'max_size'; value: FormFileSize; message: string }
+  | { id: string; type: 'allowed_extensions'; value: ExtensionType[]; message: string };
