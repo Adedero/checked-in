@@ -1,17 +1,10 @@
+@import url(../fonts/manrope/manrope.css);
+@import url(../fonts/geist-mono/geist-mono.css);
+
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
 @custom-variant dark (&:where(.dark, .dark *));
-
-@font-face {
-  font-family: 'Manrope';
-  src: url('../fonts/manrope.ttf');
-}
-
-@font-face {
-  font-family: 'Geist Mono';
-  src: url('../fonts/geist-mono.ttf');
-}
 
 @theme {
   --font-sans: 'Manrope', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -67,13 +60,13 @@
   }
 }
 
-:root {
+/* :root {
   --ui-primary: black;
 }
 
 .dark {
   --ui-primary: white;
-}
+} */
 
 html {
   font-size: 15px;

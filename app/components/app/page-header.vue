@@ -15,7 +15,7 @@ const {
 </script>
 
 <template>
-  <header class="flex items-start gap-2 justify-between flex-wrap">
+  <header class="flex items-center gap-2 justify-between flex-wrap">
     <slot name="header">
       <div class="space-y-0.5">
         <slot name="breadcrumb">

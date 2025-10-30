@@ -26,7 +26,7 @@ const items = ref<DropdownMenuItem[]>([
         id: ulid(),
         formId: form.value.id,
         text: 'New heading',
-        type: 'heading',
+        type: 'heading'
       });
     }
   },

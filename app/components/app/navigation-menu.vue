@@ -24,12 +24,14 @@ const items: NavigationMenuItem[] = [
     open: true,
     children: [
       {
-        label: 'Created Sessions',
-        icon: 'lucide:clipboard-clock'
+        label: 'Sessions',
+        icon: 'lucide:clipboard-clock',
+        to: '/app/attendance/sessions'
       },
       {
         label: 'Check Ins',
-        icon: 'lucide:pointer'
+        icon: 'lucide:pointer',
+        to: '/app/attendance/check-ins'
       }
     ]
   },

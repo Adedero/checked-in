@@ -62,7 +62,46 @@ export const groupMemberRelations = relations(groupMembers, ({ one }) => ({
   })
 }));
 
-export const attendances = table('attendance', {
+// Attedance sesssions
+export const attendanceSession = table('attendance_session', {
+  ...id,
+  creatorId: t
+    .text()
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  groupId: t.text().references(() => groups.id, { onDelete: 'cascade' }),
+  // formId: t.text().references(() => forms.id, { onDelete: 'set null' }),
+  code: t.text().unique().notNull(),
+  description: t.text().default(''),
+  isActive: t.integer({ mode: 'boolean' }).notNull().default(true),
+  focusPoint: t
+    .text({ mode: 'json' })
+    .$type<{ lat: number; lng: number } | null>()
+    .default(null),
+  radiusInMeters: t.integer(),
+  maximumAttendees: t.integer().notNull().default(100),
+  startsAt: t.integer({ mode: 'timestamp' }).notNull(),
+  endsAt: t.integer({ mode: 'timestamp' }),
+  ...timestamps
+});
+
+// Attendance relations
+export const attendanceSessionRelations = relations(
+  attendanceSession,
+  ({ one }) => ({
+    creator: one(users, {
+      fields: [attendanceSession.creatorId],
+      references: [users.id]
+    }),
+    group: one(groups, {
+      fields: [attendanceSession.groupId],
+      references: [groups.id]
+    })
+  })
+);
+
+// Check ins
+export const checkIns = table('check_in', {
   ...id,
   groupId: t.text().references(() => groups.id, { onDelete: 'cascade' }),
   memberId: t.text().references(() => groupMembers.id, { onDelete: 'cascade' }),

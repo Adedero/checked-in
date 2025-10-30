@@ -13,7 +13,11 @@ const { useFieldRef } = useFormBuilder(useFormStateContext('form-new'));
 
 const field = useFieldRef<DividerField>(props.field.id);
 
-const styles = ref<NonNullable<DividerField['style']>[]>(['solid', 'dashed', 'dotted']);
+const styles = ref<NonNullable<DividerField['style']>[]>([
+  'solid',
+  'dashed',
+  'dotted'
+]);
 const colors = ref<NonNullable<SeparatorProps['color']>[]>([
   'primary',
   'secondary',
@@ -35,7 +39,12 @@ const colors = ref<NonNullable<SeparatorProps['color']>[]>([
           {{ field.text || 'Add label' }}
         </p>
         <template #in-place="{ close }">
-          <NuxtInput v-model="field.text" v-on-click-outside="close" size="sm" class="w-32" />
+          <NuxtInput
+            v-model="field.text"
+            v-on-click-outside="close"
+            size="sm"
+            class="w-32"
+          />
         </template>
       </NuxtInPlace>
     </NuxtSeparator>
